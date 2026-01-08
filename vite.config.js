@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/fractal-navigator/',
+  base: '/Fractal-roadmap/',
   plugins: [react(), tailwindcss()],
   test: {
     globals: true,
