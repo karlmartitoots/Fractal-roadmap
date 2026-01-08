@@ -71,7 +71,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800">
-      <div className="container mx-auto p-8">
+      <div className="container mx-auto p-4 sm:p-6 md:p-8">
         <Breadcrumb path={breadcrumb} onNavigate={handleZoomIn} />
         {currentNode && (
             <Node
