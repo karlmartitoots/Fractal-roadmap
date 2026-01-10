@@ -1,8 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import initialData from './initialData';
 import Breadcrumb from './Breadcrumb';
 import Node from './Node';
 import { toggleNode, deleteNode } from './logic';
+
+const variants = {
+  enter: (direction) => ({
+    scale: direction === 'in' ? 0.9 : 1.1,
+    opacity: 0,
+  }),
+  center: {
+    scale: 1,
+    opacity: 1,
+  },
+  exit: (direction) => ({
+    scale: direction === 'in' ? 1.1 : 0.9,
+    opacity: 0,
+  }),
+};
 
 function App() {
   const [data, setData] = useState(() => {
@@ -12,6 +28,7 @@ function App() {
 
   const [currentNodeId, setCurrentNodeId] = useState('root');
   const [breadcrumb, setBreadcrumb] = useState([]);
+  const [direction, setDirection] = useState('in');
 
   useEffect(() => {
     localStorage.setItem('fractal-navigator-data', JSON.stringify(data));
@@ -36,14 +53,24 @@ function App() {
   }, [currentNodeId, data]);
 
   const handleZoomIn = (nodeId) => {
+    setDirection('in');
     setCurrentNodeId(nodeId);
   };
 
   const handleZoomOut = () => {
     if (breadcrumb.length > 1) {
+      setDirection('out');
       setCurrentNodeId(breadcrumb[breadcrumb.length - 2].id);
     }
   };
+
+  const handleBreadcrumbNavigate = (nodeId) => {
+    if (nodeId !== currentNodeId) {
+       // Breadcrumb navigation is effectively zooming out (or staying at root)
+       setDirection('out');
+       setCurrentNodeId(nodeId);
+    }
+  }
 
   const addSubTask = (title) => {
     const newNode = {
@@ -89,6 +116,10 @@ function App() {
     };
 
     setData(findAndAddMagic(data, targetNodeId));
+    if (targetNodeId !== currentNodeId) {
+        setDirection('in');
+        setCurrentNodeId(targetNodeId);
+    }
   };
 
   const handleToggleComplete = (targetId) => {
@@ -104,20 +135,33 @@ function App() {
   const currentNode = breadcrumb[breadcrumb.length -1];
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans text-gray-800">
+    <div className="min-h-screen bg-gray-50 font-sans text-gray-800 overflow-hidden">
       <div className="container mx-auto p-4 sm:p-6 md:p-8">
-        <Breadcrumb path={breadcrumb} onNavigate={handleZoomIn} />
-        {currentNode && (
-            <Node
-            node={currentNode}
-            onZoomIn={handleZoomIn}
-            onZoomOut={handleZoomOut}
-            onAddSubTask={addSubTask}
-            onMagic={handleMagic}
-            onToggle={handleToggleComplete}
-            onDelete={handleDelete}
-            />
-        )}
+        <Breadcrumb path={breadcrumb} onNavigate={handleBreadcrumbNavigate} />
+        <AnimatePresence mode="wait" custom={direction}>
+            {currentNode && (
+                <motion.div
+                    key={currentNode.id}
+                    custom={direction}
+                    variants={variants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="w-full"
+                >
+                    <Node
+                    node={currentNode}
+                    onZoomIn={handleZoomIn}
+                    onZoomOut={handleZoomOut}
+                    onAddSubTask={addSubTask}
+                    onMagic={handleMagic}
+                    onToggle={handleToggleComplete}
+                    onDelete={handleDelete}
+                    />
+                </motion.div>
+            )}
+        </AnimatePresence>
       </div>
     </div>
   );

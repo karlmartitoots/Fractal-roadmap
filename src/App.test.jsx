@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, fireEvent, within, waitFor } from '@testing-library/react';
 import App from './App';
 import { describe, it, expect } from 'vitest';
 import React from 'react';
@@ -68,11 +68,13 @@ describe('App', () => {
 
     fireEvent.click(magicButton);
 
-    // Click on "Project A" text to zoom in (avoiding the magic button)
-    fireEvent.click(subtaskTitle);
+    // The magic button now auto-navigates, so we don't need to manually click to zoom in
 
     // Now the main title should be "Project A"
-    expect(screen.getByRole('heading', { name: /Project A/i, level: 1 })).toBeInTheDocument();
+    // We use waitFor because of the animation delay (mode="wait")
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: /Project A/i, level: 1 })).toBeInTheDocument();
+    });
 
     // And we should see the magic subtasks
     expect(screen.getByText('Magic Subtask 1')).toBeInTheDocument();
