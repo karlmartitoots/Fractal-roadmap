@@ -67,6 +67,29 @@ function App() {
     setData(findAndAdd(data, currentNodeId));
   };
 
+  const handleMagic = (targetNodeId) => {
+    const newSubTasks = [
+      { id: Date.now().toString() + '-1', title: 'Magic Subtask 1', subTasks: [] },
+      { id: Date.now().toString() + '-2', title: 'Magic Subtask 2', subTasks: [] },
+      { id: Date.now().toString() + '-3', title: 'Magic Subtask 3', subTasks: [] },
+    ];
+
+    const findAndAddMagic = (node, targetId) => {
+      if (node.id === targetId) {
+        return {
+          ...node,
+          subTasks: [...node.subTasks, ...newSubTasks],
+        };
+      }
+      return {
+        ...node,
+        subTasks: node.subTasks.map(subTask => findAndAddMagic(subTask, targetId)),
+      };
+    };
+
+    setData(findAndAddMagic(data, targetNodeId));
+  };
+
   const currentNode = breadcrumb[breadcrumb.length -1];
 
   return (
@@ -79,6 +102,7 @@ function App() {
             onZoomIn={handleZoomIn}
             onZoomOut={handleZoomOut}
             onAddSubTask={addSubTask}
+            onMagic={handleMagic}
             />
         )}
       </div>
