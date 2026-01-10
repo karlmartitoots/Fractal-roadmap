@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import initialData from './initialData';
 import Breadcrumb from './Breadcrumb';
 import Node from './Node';
+import { toggleNode, deleteNode } from './logic';
 
 function App() {
   const [data, setData] = useState(() => {
@@ -90,6 +91,16 @@ function App() {
     setData(findAndAddMagic(data, targetNodeId));
   };
 
+  const handleToggleComplete = (targetId) => {
+    setData(prevData => toggleNode(prevData, targetId));
+  };
+
+  const handleDelete = (targetId) => {
+    if (window.confirm('Are you sure you want to delete this task?')) {
+        setData(prevData => deleteNode(prevData, targetId));
+    }
+  };
+
   const currentNode = breadcrumb[breadcrumb.length -1];
 
   return (
@@ -103,6 +114,8 @@ function App() {
             onZoomOut={handleZoomOut}
             onAddSubTask={addSubTask}
             onMagic={handleMagic}
+            onToggle={handleToggleComplete}
+            onDelete={handleDelete}
             />
         )}
       </div>
