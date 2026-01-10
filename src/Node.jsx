@@ -1,4 +1,24 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+
+const listVariants = {
+  hidden: { opacity: 1 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.3, ease: "easeOut" }
+  },
+};
 
 const Node = ({ node, onZoomIn, onZoomOut, onAddSubTask, onMagic, onToggle, onDelete }) => {
   const [newSubTaskTitle, setNewSubTaskTitle] = useState('');
@@ -31,10 +51,16 @@ const Node = ({ node, onZoomIn, onZoomOut, onAddSubTask, onMagic, onToggle, onDe
           Zoom Out
         </button>
       </div>
-      <ul className="mb-6">
+      <motion.ul
+        className="mb-6"
+        variants={listVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {node.subTasks.map(subTask => (
-          <li
+          <motion.li
             key={subTask.id}
+            variants={itemVariants}
             onClick={() => onZoomIn(subTask.id)}
             className="cursor-pointer text-base sm:text-lg p-3 border-b border-gray-200 hover:bg-gray-50 transition-colors duration-150 flex justify-between items-center group"
           >
@@ -74,9 +100,9 @@ const Node = ({ node, onZoomIn, onZoomOut, onAddSubTask, onMagic, onToggle, onDe
                 ✕
                 </button>
             </div>
-          </li>
+          </motion.li>
         ))}
-      </ul>
+      </motion.ul>
       <div className="flex flex-col sm:flex-row">
         <input
           type="text"
