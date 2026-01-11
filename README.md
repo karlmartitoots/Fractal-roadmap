@@ -1,27 +1,68 @@
-The Core UX Concept: "The Fractal Navigator"
+# Fractal-roadmap
 
-Instead of a giant, static Gantt chart or a massive Trello board, imagine a recursive tree where every task can be its own roadmap.
+A recursive, focus-oriented task management tool that allows you to break down goals into infinite sub-tasks. Instead of overwhelming you with a giant list, Fractal-roadmap lets you "zoom in" on specific tasks, keeping your view clean and your focus sharp.
 
-Key Experience Pillars:
+[**Live Demo**](https://karlmartitoots.github.io/Fractal-roadmap/)
 
-The "Deep Dive" Focus: When you click a goal, the screen clears. That goal becomes the new "Header," and you only see the 3-5 sub-tasks for that specific node. This prevents the "too large" feeling by physically limiting your field of view.
-The "Breadcrumb" Trail: A simple line at the top (e.g., My Business > Marketing > Social Media) keeps you grounded without showing the entire forest.
-AI "Sub-mapping": A single button next to any task that says "Break this down." It sends that specific task to an LLM to generate 3 logical next steps, which appear as new nodes.
+## Key Features
 
-2. The "Vibe Coding" Stack (Build it in 1 hour)
-To get this running today, you don't want a database or a complex framework. You want a single-file React or HTML application that uses localStorage.
-UI Library: Tailwind CSS (for speed and aesthetics).
-Data Structure: A simple nested JSON object.
-Interaction: * Click to enter a node.
-Backspace/Esc to go up one level.
-Cmd+Enter to add a new sub-task.
+*   **Recursive Task Nesting:** Every task can become its own project with its own sub-tasks. There is no limit to the depth.
+*   **Spatial Zoom Navigation:** Navigate through your task tree with smooth zoom transitions (powered by Framer Motion) that provide a sense of depth and context.
+*   **Focus Mode:** By zooming in, you hide the "noise" of the rest of the tree, allowing you to focus entirely on the immediate sub-tasks at hand.
+*   **Breadcrumb Navigation:** Always know where you are in the hierarchy with an interactive breadcrumb trail.
+*   **Progress Tracking:** Visual indicators (strikethroughs and completion states) propagate up the tree. Completing all sub-tasks automatically completes the parent.
+*   **"Magic" Breakdown:** A placeholder AI feature. Click the magic wand button to simulate auto-generating sub-tasks for a goal.
+*   **Local Persistence:** Your data is saved automatically to your browser's Local Storage, so you won't lose your work upon refresh.
 
-3. The Feature Roadmap (Iterative)
+## How to Use
 
-Iteration A (The AI Breakdown): "Jules, add a 'Magic' button next to each task. When clicked, it should call a placeholder function that I will eventually hook up to Gemini to auto-generate 3 sub-tasks."
+1.  **Navigation:**
+    *   **Zoom In:** Click on any task in the list to "dive" into it and view its sub-tasks.
+    *   **Zoom Out:** Use the "Zoom Out" button or click a parent link in the breadcrumb trail to move up a level.
 
-Iteration B (Visual Progress): "Add a progress ring around the 'Zoom Out' button that shows how many sub-tasks in the parent node are completed."
+2.  **Managing Tasks:**
+    *   **Add:** Type a task name in the input field at the bottom and click "Add" to create a new sub-task for the current level.
+    *   **Complete:** Click the checkbox next to a task to mark it as done. This status bubbles up the tree.
+    *   **Delete:** Hover over a task row to reveal the delete (✕) button. You will be asked to confirm before the task is removed.
 
-Iteration C (The Aesthetic): "Make the transitions between levels feel like a 'Zoom' animation. When I enter a task, it should feel like I'm diving deeper into the map."
+3.  **The "Magic" Button (✨):**
+    *   Click the sparkle icon next to a task to automatically generate 3 sample sub-tasks.
+    *   If you click this on a task in the list, the app will automatically zoom into that task to show you the newly generated items.
 
-Iteration D: Add a 'Download Roadmap' button that saves your entire fractal tree as a JSON file
+## Development
+
+If you want to run this project locally or contribute:
+
+### Prerequisites
+*   Node.js (v18 or higher recommended)
+*   npm (comes with Node.js)
+
+### Installation
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/karlmartitoots/Fractal-roadmap.git
+    cd Fractal-roadmap
+    ```
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+
+### Running Locally
+Start the development server:
+```bash
+npm run dev
+```
+Open your browser and navigate to the URL shown in the terminal (usually `http://localhost:5173/Fractal-roadmap/`).
+
+### Testing
+Run the test suite with Vitest:
+```bash
+npm run test
+```
+
+## Tech Stack
+*   **React:** UI Component library.
+*   **Vite:** Fast build tool and development server.
+*   **Tailwind CSS:** Utility-first CSS framework for styling.
+*   **Framer Motion:** Library for animations and gestures.
